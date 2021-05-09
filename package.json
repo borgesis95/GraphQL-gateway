@@ -8,7 +8,6 @@
     "start": "nodemon server.ts",
     "lint": "eslint . --ext .ts",
     "commit": "cz"
-
   },
   "repository": {
     "type": "git",
@@ -21,17 +20,21 @@
   },
   "homepage": "https://github.com/borgesis95/GraphQL-gateway#readme",
   "dependencies": {
+    "apollo-server": "^2.24.0",
+    "apollo-server-express": "^2.24.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "class-validator": "^0.13.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "graphql": "^15.5.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.3",
     "validatorjs": "^3.22.1"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.0",
+    "@types/graphql": "^14.5.0",
     "@types/bcrypt": "^3.0.1",
     "@types/express": "^4.17.11",
     "@types/jsonwebtoken": "^8.5.1",

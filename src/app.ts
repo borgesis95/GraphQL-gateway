@@ -1,9 +1,12 @@
 import express from "express";
+import { ApolloServer, gql } from "apollo-server";
+
 import errors from "./middleware/error";
 
 export default class App {
   public app: express.Application;
   public port: number;
+  public schema: any;
 
   constructor(controllers: unknown, port: number) {
     this.app = express();
@@ -24,8 +27,28 @@ export default class App {
   }
 
   public listen() {
-    this.app.listen(this.port,() => {
-      console.log(`App Gateway listening on: ${this.port}`);
+    const schema = gql`
+      type Query {
+        "A simple type for getting started!"
+        hello: String
+      }
+    `;
+
+    // Resolvers
+    const resolvers = {
+      Query: {
+        hello: () => "world",
+      },
+    };
+
+    const server = new ApolloServer({
+      typeDefs : schema,
+      resolvers,
     });
+
+    server.listen(this.port).then(({ url }) => {
+      console.log(`🚀 Server ready at ${url}`);
+    });
+
   }
 }
