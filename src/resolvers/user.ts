@@ -1,10 +1,8 @@
 export default {
   Query: {
-    user: async (parent:any, { id} :any , { models }:any) => {
-      return {
-        id: 1,
-        username: "Pippo",
-      };
+    users: async (parent:any, { id} :any , { dataSources }:any) => {
+      const response = await dataSources.usersAPI.getAllUsers();
+      return response.data;
     },
   },
 };

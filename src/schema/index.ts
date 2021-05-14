@@ -3,7 +3,7 @@ import { gql } from "apollo-server-express";
 
 const baseSchema = gql`
   type Query {
-   user : User
+   users : [User]
   }
 `;
 export default [baseSchema, userSchema];

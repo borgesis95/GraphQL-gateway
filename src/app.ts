@@ -4,6 +4,7 @@ import schema from "./schema";
 import resolvers from "./resolvers";
 
 import errors from "./middleware/error";
+import UserAPI from "./dataSource/user";
 
 export default class App {
   public app: express.Application;
@@ -24,6 +25,11 @@ export default class App {
     const server = new ApolloServer({
       typeDefs: schema,
       resolvers,
+      dataSources :() => {
+        return  {
+          usersAPI: new UserAPI()
+        }
+      }
     });
 
     server.listen(this.port).then(({ url }) => {
