@@ -26,7 +26,6 @@ class UserAPI extends RESTDataSource {
   }
 
   /*Reducers*/
-
   async loginUserReducer(email: string, token: string) {
     return {
       email,

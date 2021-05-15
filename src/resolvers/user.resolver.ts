@@ -1,4 +1,3 @@
-import UserAPI from "../dataSource/user.datasource";
 import { UserLoginRequest } from "../interfaces/user.interface";
 
 export default {
@@ -15,9 +14,10 @@ export default {
       { email, password }: UserLoginRequest,
       { dataSources }: any
     ) => {
-      const response =  await dataSources.usersAPI.loginUser({email,password});
 
-      const token = response.data.token;
+      const response =   await dataSources.usersAPI.loginUser({email,password});
+
+      const token:string = response.data.token;
       return dataSources.usersAPI.loginUserReducer(email,token);
     },
   },
