@@ -1,9 +1,13 @@
-import userSchema from "./user";
+import userSchema from "./user.schema";
 import { gql } from "apollo-server-express";
 
 const baseSchema = gql`
   type Query {
-   users : [User]
+    users: [User]
+  }
+
+  type Mutation {
+    login(email: String, password: String): User
   }
 `;
 export default [baseSchema, userSchema];

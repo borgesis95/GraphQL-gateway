@@ -1,10 +1,10 @@
 import express from "express";
-import { ApolloServer, gql } from "apollo-server";
+import { ApolloServer } from "apollo-server";
 import schema from "./schema";
 import resolvers from "./resolvers";
 
 import errors from "./middleware/error";
-import UserAPI from "./dataSource/user";
+import UserAPI from "./dataSource/user.datasource";
 
 export default class App {
   public app: express.Application;
