@@ -8,6 +8,7 @@ const baseSchema = gql`
 
   type Mutation {
     login(email: String, password: String): User
+    signin(email:String, password:String) : User
   }
 `;
 export default [baseSchema, userSchema];

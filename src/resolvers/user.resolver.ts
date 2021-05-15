@@ -1,4 +1,4 @@
-import { UserLoginRequest } from "../interfaces/user.interface";
+import { UserRequest } from "../interfaces/user.interface";
 
 export default {
   Query: {
@@ -9,16 +9,32 @@ export default {
   },
 
   Mutation: {
+    // Login Mutation
     login: async (
       parent: any,
-      { email, password }: UserLoginRequest,
+      { email, password }: UserRequest,
       { dataSources }: any
     ) => {
+      const response = await dataSources.usersAPI.loginUser({
+        email,
+        password,
+      });
 
-      const response =   await dataSources.usersAPI.loginUser({email,password});
+      const token: string = response.data.token;
+      return dataSources.usersAPI.loginUserReducer(email, token);
+    },
+    // Signin Mutation
+    signin: async (
+      parent: any,
+      { email, password }: UserRequest,
+      { dataSources }: any
+    ) => {
+      const response = await dataSources.usersAPI.signinUser({
+        email,
+        password,
+      });
 
-      const token:string = response.data.token;
-      return dataSources.usersAPI.loginUserReducer(email,token);
+      return dataSources.usersAPI.signinReducer(response.data);
     },
   },
 };
