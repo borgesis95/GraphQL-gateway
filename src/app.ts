@@ -1,10 +1,13 @@
 import express from "express";
-import {ApolloServer, AuthenticationError } from "apollo-server";
+import { ApolloServer, AuthenticationError } from "apollo-server";
 import schema from "./schema";
 import resolvers from "./resolvers";
+import { BaseRedisCache } from "apollo-server-cache-redis";
+import Redis from "ioredis";
 
 import UserAPI from "./dataSource/user.datasource";
 import { GraphQLError } from "graphql";
+import RedisDataSource from "./dataSource/redis.datasource";
 
 export default class App {
   public app: express.Application;
@@ -13,19 +16,22 @@ export default class App {
   constructor(port: number) {
     this.app = express();
     this.port = port;
-
   }
 
-
-
   public listen() {
+    const redis = new Redis({
+      port: 6379, // Redis port
+    });
+
     const server = new ApolloServer({
       typeDefs: schema,
       resolvers,
-      dataSources :() => {
-        return  {
-          usersAPI: new UserAPI()
-        }
+
+      dataSources: () => {
+        return {
+          usersAPI: new UserAPI(),
+          redisSource : new RedisDataSource(redis)
+        };
       },
 
       /* This method of ApolloServer constructor intercept all errors before to get back to client */
@@ -33,9 +39,11 @@ export default class App {
         if (error.originalError instanceof AuthenticationError) {
           return new GraphQLError("Not allowed to perform this operation");
         }
-  
-        // TODO: Add something that send this error on service like kafka 
-        return new GraphQLError(`Internal Server Error: ${error.extensions.response.body.message}`);
+
+        // TODO: Add something that send this error on service like kafka
+        return new GraphQLError(
+          `Internal Server Error: ${error.extensions.response.body.message}`
+        );
       },
     });
 
