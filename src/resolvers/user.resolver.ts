@@ -4,6 +4,10 @@ export default {
   Query: {
     users: async (parent: any, { id }: any, { dataSources }: any) => {
       const response = await dataSources.usersAPI.getAllUsers();
+      
+      // TODO: Remove next line
+      const redisResponse = await dataSources.redisSource.getToken();
+      console.log("redis repsonse",redisResponse);
       return response.data;
     },
   },
