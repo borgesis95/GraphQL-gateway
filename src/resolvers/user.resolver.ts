@@ -1,19 +1,18 @@
+import { AuthenticationError } from "apollo-server-errors";
 import { UserRequest } from "../interfaces/user.interface";
 
 export default {
   Query: {
-    users: async (parent: any, { id }: any, { dataSources }: any) => {
-      const response = await dataSources.usersAPI.getAllUsers();
-      
-      // TODO: Remove next line
-      const redisResponse = await dataSources.redisSource.getToken();
-      console.log("redis repsonse",redisResponse);
-      return response.data;
+    users: async (parent: any, { id }: any, { dataSources, user }: any) => {
+      // If users exist on Redis
+      if (user) {
+        const response = await dataSources.usersAPI.getAllUsers();
+        return response.data;
+      }
+      throw new AuthenticationError("You need to be logged in");
     },
-  },
 
-  Mutation: {
-    // Login Mutation
+    // Login Query
     login: async (
       parent: any,
       { email, password }: UserRequest,
@@ -25,8 +24,13 @@ export default {
       });
 
       const token: string = response.data.token;
+      // Now, JWT will be saved into redis store.
+      await dataSources.redisSource.saveToken(email, token);
       return dataSources.usersAPI.loginUserReducer(email, token);
     },
+  },
+
+  Mutation: {
     // Signin Mutation
     signin: async (
       parent: any,
@@ -39,6 +43,21 @@ export default {
       });
 
       return dataSources.usersAPI.signinReducer(response.data);
+    },
+
+    signout: async (parent: any, item: any, { dataSources, user }: any) => {
+      if (user && user.token) {
+        // Redis Response for "DEL" operation is numbers of keys removed (it should be just one)
+        const response = await dataSources.redisSource.deleteTokenFromCache(
+          user.token
+        );
+        console.log("response", response);
+
+        if (response === 1)
+          return ` Signout for ${user.username} has been successful`;
+      } else {
+        throw new AuthenticationError("You need to be logged in");
+      }
     },
   },
 };

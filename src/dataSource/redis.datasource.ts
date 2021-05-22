@@ -10,12 +10,15 @@ class RedisDataSource extends RESTDataSource  {
   }
 
   /**
-   * @description Get users
+   * @description Save user's JWT token and relative mail of users.
    * @returns
    */
-  async saveToken() {
-    console.log("Redis save token");
-    return await this.redisClient.set("token","123456");
+  async saveToken(username: string, token:string) {
+    const body = {
+      username,
+      token
+    }
+    return await this.redisClient.set(token,JSON.stringify(body),"EX",60*30); // 30 mins
   }
 
 
@@ -23,9 +26,13 @@ class RedisDataSource extends RESTDataSource  {
    * 
    */
 
-  async getToken() {
-      console.log("get token");
-      return await this.redisClient.get("token");
+  async getToken(token:string) {
+      return await this.redisClient.get(token);
+  }
+
+
+  async deleteTokenFromCache (token:string) {
+    return await this.redisClient.del(token);
   }
 }
 

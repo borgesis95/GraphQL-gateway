@@ -36,7 +36,7 @@ docker run redis
 
 Of course the port number on the container need to bind to the port exposed outside of it.
 ```
-docker run –p 6379 redis
+docker run -p 6379:6379 redis
 ```
 You can find more info about Redis here:
 https://redis.io/
