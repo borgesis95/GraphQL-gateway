@@ -2,7 +2,6 @@ import express from "express";
 import { ApolloServer, AuthenticationError } from "apollo-server";
 import schema from "./schema";
 import resolvers from "./resolvers";
-import { BaseRedisCache } from "apollo-server-cache-redis";
 import Redis from "ioredis";
 
 import UserAPI from "./dataSource/user.datasource";
@@ -15,12 +14,13 @@ export default class App {
 
   constructor(port: number) {
     this.app = express();
-    this.port = port;
+    this.port = parseInt(process.env.GATEWAY_PORT);
+
   }
 
   public listen() {
     const redis = new Redis({
-      port: 6379, // Redis port
+      port: parseInt(process.env.REDIS_PORT), // Redis port
     });
 
     const server = new ApolloServer({
