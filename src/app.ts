@@ -24,13 +24,22 @@ export default class App {
     });
 
     const server = new ApolloServer({
+      introspection: true,
       typeDefs: schema,
       resolvers,
+      context: async ({ req }) => {
+        // Get the user token from the headers.
+        const token = req.headers.authorization || "";
+
+        // Add the user to the context
+        const isUserOnRedis = await redis.get(token);
+        return { user: isUserOnRedis ? JSON.parse(isUserOnRedis) : null };
+      },
 
       dataSources: () => {
         return {
           usersAPI: new UserAPI(),
-          redisSource : new RedisDataSource(redis)
+          redisSource: new RedisDataSource(redis),
         };
       },
 
@@ -39,7 +48,6 @@ export default class App {
         if (error.originalError instanceof AuthenticationError) {
           return new GraphQLError("Not allowed to perform this operation");
         }
-
         // TODO: Add something that send this error on service like kafka
         return new GraphQLError(
           `Internal Server Error: ${error.extensions.response.body.message}`
