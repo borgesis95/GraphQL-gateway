@@ -51,7 +51,6 @@ export default {
         const response = await dataSources.redisSource.deleteTokenFromCache(
           user.token
         );
-        console.log("response", response);
 
         if (response === 1)
           return ` Signout for ${user.username} has been successful`;

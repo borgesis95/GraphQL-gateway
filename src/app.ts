@@ -5,6 +5,7 @@ import resolvers from "./resolvers";
 import Redis from "ioredis";
 
 import UserAPI from "./dataSource/user.datasource";
+import EventAPI from "./dataSource/event.datasource";
 import { GraphQLError } from "graphql";
 import RedisDataSource from "./dataSource/redis.datasource";
 
@@ -15,7 +16,6 @@ export default class App {
   constructor(port: number) {
     this.app = express();
     this.port = parseInt(process.env.GATEWAY_PORT);
-
   }
 
   public listen() {
@@ -39,6 +39,7 @@ export default class App {
       dataSources: () => {
         return {
           usersAPI: new UserAPI(),
+          eventsAPI: new EventAPI(),
           redisSource: new RedisDataSource(redis),
         };
       },

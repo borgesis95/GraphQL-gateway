@@ -1,10 +1,12 @@
 import userSchema from "./user.schema";
+import eventSchema from "./event.schema";
 import { gql } from "apollo-server-express";
 
 const baseSchema = gql`
   type Query {
     users: [User]
     login(email: String, password: String): User
+    eventsUser(id: String) : [EventsUser]
 
 
   }
@@ -14,4 +16,4 @@ const baseSchema = gql`
     signout : String
   }
 `;
-export default [baseSchema, userSchema];
+export default [baseSchema, userSchema,eventSchema];
