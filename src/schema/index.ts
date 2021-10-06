@@ -6,7 +6,7 @@ const baseSchema = gql`
   type Query {
     users: [User]
     login(email: String, password: String): User
-    eventsUser(id: String) : [EventsUser]
+    events (userId: String) : [EventsUser]
 
 
   }
@@ -14,6 +14,7 @@ const baseSchema = gql`
   type Mutation {
     signin(email:String, password:String) : User
     signout : String
+    addEvent (params : AddEvent) : String
   }
 `;
 export default [baseSchema, userSchema,eventSchema];

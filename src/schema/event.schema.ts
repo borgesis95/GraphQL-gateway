@@ -11,4 +11,18 @@ export default gql`
     """
     title: String
   }
+
+  input AddEvent {
+    """
+    Title of event 
+    """
+    title : String,
+    description : String,
+    eventDate : String,
+    duration : String,
+    handlerId : Int,
+    greenpass : Boolean,
+    maxPartecipant : Int,
+    city : String
+  }
 `;

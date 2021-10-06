@@ -1,4 +1,5 @@
 import { RESTDataSource } from "apollo-datasource-rest";
+import { AddEvent } from "../../src/interfaces/events";
 
 class EventAPI extends RESTDataSource {
   constructor() {
@@ -12,6 +13,27 @@ class EventAPI extends RESTDataSource {
 
   async getEventListFromUser(userId: number) {
     return this.get(`basket/${userId}`);
+  }
+
+  /**
+   * This method will be call API that allow to insert
+   * an events on events list (which each user could decide to partecipate)
+   */
+  async addEventOnList(body : AddEvent ) : Promise<string> {
+
+    const bodyForRequest  = {
+      titolo : body.title,
+      descrizione : body.description,
+      dataEvento : body.eventDate,
+      durata : body.duration,
+      idOrganizzatore : body.handlerId,
+      greenPass: true,
+      numeroMaxPartecipanti : body.maxPartecipant,
+      citta : body.city,
+      //TODO: This need to be changed into service event-service
+      numeroPartecipanti : 0
+    }
+    return this.post(`add`,bodyForRequest);
   }
 
   /*Reducers*/
