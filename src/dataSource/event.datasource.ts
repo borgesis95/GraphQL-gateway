@@ -19,21 +19,24 @@ class EventAPI extends RESTDataSource {
    * This method will be call API that allow to insert
    * an events on events list (which each user could decide to partecipate)
    */
-  async addEventOnList(body : AddEvent ) : Promise<string> {
-
-    const bodyForRequest  = {
-      titolo : body.title,
-      descrizione : body.description,
-      dataEvento : body.eventDate,
-      durata : body.duration,
-      idOrganizzatore : body.handlerId,
+  async addEventOnList(body: AddEvent): Promise<string> {
+    const bodyForRequest = {
+      titolo: body.title,
+      descrizione: body.description,
+      dataEvento: body.eventDate,
+      durata: body.duration,
+      idOrganizzatore: body.handlerId,
       greenPass: true,
-      numeroMaxPartecipanti : body.maxPartecipant,
-      citta : body.city,
+      numeroMaxPartecipanti: body.maxPartecipant,
+      citta: body.city,
       //TODO: This need to be changed into service event-service
-      numeroPartecipanti : 0
-    }
-    return this.post(`add`,bodyForRequest);
+      numeroPartecipanti: 0,
+    };
+    return this.post(`add`, bodyForRequest);
+  }
+
+  async getEventsUserList(userId: number) {
+    return this.get(`/basket/${userId}`);
   }
 
   /*Reducers*/
@@ -42,6 +45,19 @@ class EventAPI extends RESTDataSource {
       return {
         id: item.id,
         title: item.titolo,
+      };
+    });
+  }
+
+  eventsUserListReducer(data: any) {
+    return data.map((item: any) => {
+      return {
+        id: item.id,
+        accessKey: item.chiaveDiAccesso,
+        title: item.titolo,
+        description: item.descrizione,
+        dataevento: item.dataevento,
+        durata: item.durata,
       };
     });
   }

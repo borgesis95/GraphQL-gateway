@@ -6,7 +6,8 @@ const baseSchema = gql`
   type Query {
     users: [User]
     login(email: String, password: String): User
-    events (userId: String) : [EventsUser]
+    events (userId: String) : [EventsUser],
+    userEventList (userId : String) : [EventsUserList]
 
 
   }

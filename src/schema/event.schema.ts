@@ -12,6 +12,15 @@ export default gql`
     title: String
   }
 
+  type EventsUserList {
+    id : ID,
+    accessKey : String,
+    title : String,
+    description : String,
+    eventDate : String,
+    duration : Int
+  }
+
   input AddEvent {
     """
     Title of event 
