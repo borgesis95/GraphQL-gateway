@@ -8,6 +8,7 @@ const baseSchema = gql`
     login(email: String, password: String): User
     events (userId: String) : [EventsUser],
     userEventList (userId : String) : [EventsUserList]
+    scanEvent (userId : String, eventId: String, accessKey : String) : String
 
 
   }

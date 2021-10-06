@@ -1,5 +1,5 @@
 import { RESTDataSource } from "apollo-datasource-rest";
-import { AddEvent } from "../../src/interfaces/events";
+import { AddEvent, ScanEvent } from "../../src/interfaces/events";
 
 class EventAPI extends RESTDataSource {
   constructor() {
@@ -11,7 +11,8 @@ class EventAPI extends RESTDataSource {
    * @description Get events associated to specific users
    */
 
-  getEventListFromUser(userId: number) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  async getEventListFromUser(userId: number) {
     return this.get(`basket/${userId}`);
   }
 
@@ -19,7 +20,7 @@ class EventAPI extends RESTDataSource {
    * This method will be call API that allow to insert
    * an events on events list (which each user could decide to partecipate)
    */
-  async addEventOnList(body: AddEvent): Promise<string> {
+  async addEventOnList(body: AddEvent){
     const bodyForRequest = {
       titolo: body.title,
       descrizione: body.description,
@@ -35,9 +36,22 @@ class EventAPI extends RESTDataSource {
     return this.post(`add`, bodyForRequest);
   }
 
+  /**
+   * 
+   * This method allow to retrieve events for specific user 
+   * @param userId 
+   * @returns 
+   */
   getEventsUserList(userId: number) {
     return this.get(`/basket/${userId}`);
   }
+
+  /**
+   * This method allow user  to add an event on his list
+   * @param userId 
+   * @param eventId 
+   * @returns 
+   */
 
   addEventOnUserList(userId: number, eventId: number) {
     const body = {
@@ -45,6 +59,22 @@ class EventAPI extends RESTDataSource {
       idUtente: userId,
     };
     return this.post(`/basket`, body);
+  }
+
+  /**
+   * This method will be invoked when event's staff
+   * need to check ticket of an user
+   * @param body 
+   * @returns 
+   */
+
+  scanEvent(body: ScanEvent) {
+    const mappedBody = {
+      idEvento: body.eventId,
+      idUtente: body.userId,
+      codiceAccesso: body.accessKey,
+    };
+    return this.post(`/basket/scan`, mappedBody);
   }
 
   /*Reducers*/
@@ -57,6 +87,7 @@ class EventAPI extends RESTDataSource {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   eventsUserListReducer(data: any) {
     return data.map((item: any) => {
       return {

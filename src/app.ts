@@ -13,7 +13,7 @@ export default class App {
   public app: express.Application;
   public port: number;
 
-  constructor(port: number) {
+  constructor() {
     this.app = express();
     this.port = parseInt(process.env.GATEWAY_PORT);
   }
@@ -31,7 +31,6 @@ export default class App {
         // Get the user token from the headers.
         const token = req.headers.authorization || "";
 
-
         // Add the user to the context
         const isUserOnRedis = await redis.get(token);
         return { user: isUserOnRedis ? JSON.parse(isUserOnRedis) : null };
@@ -47,15 +46,19 @@ export default class App {
 
       /* This method of ApolloServer constructor intercept all errors before to get back to client */
       formatError: (error: GraphQLError) => {
-
-        console.log("error",error);
+        console.log("error", error);
         if (error.originalError instanceof AuthenticationError) {
           return new GraphQLError("Not allowed to perform this operation");
         }
-        // TODO: Add something that send this error on service like kafka
-        return new GraphQLError(
-          `Internal Server Error: ${error.extensions.response.body.message}`
-        );
+
+        console.log("error", error);
+        if (error && error.extensions && error.extensions.response) {
+          return new GraphQLError(
+            `Internal Server Error: ${error.extensions.response.body.message}`
+          );
+        } else {
+          return new GraphQLError(error.message);
+        }
       },
     });
 

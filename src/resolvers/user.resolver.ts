@@ -3,7 +3,7 @@ import { UserRequest } from "../interfaces/user.interface";
 
 export default {
   Query: {
-    users: async (parent: any, { id }: any, { dataSources, user }: any) => {
+    users: async (parent: any, _: any, { dataSources, user }: any) => {
       // If users exist on Redis
       if (user) {
         const response = await dataSources.usersAPI.getAllUsers();

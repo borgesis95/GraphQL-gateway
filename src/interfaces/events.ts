@@ -12,3 +12,9 @@ export interface AddEvent  {
     maxPartecipant : number;
     city : string;
 }
+
+export interface ScanEvent {
+    eventId : number;
+    userId : number;
+    accessKey : string;
+}
