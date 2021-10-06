@@ -34,4 +34,9 @@ export default gql`
     maxPartecipant : Int,
     city : String
   }
+
+  input AddEventUserList {
+    eventId : String,
+    userId : String
+  }
 `;

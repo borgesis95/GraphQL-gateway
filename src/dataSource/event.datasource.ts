@@ -11,7 +11,7 @@ class EventAPI extends RESTDataSource {
    * @description Get events associated to specific users
    */
 
-  async getEventListFromUser(userId: number) {
+  getEventListFromUser(userId: number) {
     return this.get(`basket/${userId}`);
   }
 
@@ -35,8 +35,16 @@ class EventAPI extends RESTDataSource {
     return this.post(`add`, bodyForRequest);
   }
 
-  async getEventsUserList(userId: number) {
+  getEventsUserList(userId: number) {
     return this.get(`/basket/${userId}`);
+  }
+
+  addEventOnUserList(userId: number, eventId: number) {
+    const body = {
+      idEvento: eventId,
+      idUtente: userId,
+    };
+    return this.post(`/basket`, body);
   }
 
   /*Reducers*/

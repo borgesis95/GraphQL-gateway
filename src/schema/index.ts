@@ -16,6 +16,7 @@ const baseSchema = gql`
     signin(email:String, password:String) : User
     signout : String
     addEvent (params : AddEvent) : String
+    addEventOnUserList (params : AddEventUserList) : String
   }
 `;
 export default [baseSchema, userSchema,eventSchema];

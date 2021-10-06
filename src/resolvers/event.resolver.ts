@@ -18,14 +18,18 @@ export default {
       throw new AuthenticationError("You need to be logged in");
     },
 
-    userEventList :  async (parent : any, {userId} : any, {dataSources,user} : any) => {
-      
-      if(!user) {
+    userEventList: async (
+      parent: any,
+      { userId }: any,
+      { dataSources, user }: any
+    ) => {
+      if (!user) {
         const response = await dataSources.eventsAPI.getEventsUserList(userId);
         return dataSources.eventsAPI.eventsUserListReducer(response.data);
-        
       }
-    }
+
+      throw new AuthenticationError("You need to be logged in");
+    },
   },
   Mutation: {
     addEvent: async (
@@ -43,6 +47,28 @@ export default {
         } else {
           throw new AuthenticationError("You need to be logged in");
         }
+      } catch (error) {
+        console.error(error);
+        return error.message;
+      }
+    },
+
+    addEventOnUserList: async (
+      parent: any,
+      body: any,
+      { dataSources, user }: any
+    ) => {
+      try {
+        if (!user) {
+          const response = await dataSources.eventsAPI.addEventOnUserList(
+            body.params.userId,
+            body.params.eventId
+          );
+          console.log("response", response);
+          return response.data;
+        }
+
+        throw new AuthenticationError("You need to be logged in");
       } catch (error) {
         console.error(error);
         return error.message;
