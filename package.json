@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.ts",
     "lint": "eslint . --ext .ts",
-    "commit": "cz"
+    "commit": "cz",
+    "build" : "tsc"
   },
   "repository": {
     "type": "git",
