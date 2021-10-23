@@ -37,7 +37,7 @@ jobs:
 
         with:
           context: ./
-          file: ./DockerFile
+          file: ./Dockerfile
           push: true
           tags: borgesis95/graphql-gateway-service:latest
  
