@@ -19,7 +19,7 @@ export default class App {
   }
 
   public listen() {
-    const redis = new Redis("redis",{
+    const redis = new Redis(process.env.REDIS_HOST,{
       port: parseInt(process.env.REDIS_PORT), // Redis port
     });
 
