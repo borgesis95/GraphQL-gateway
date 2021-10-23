@@ -6,7 +6,7 @@ class UserAPI extends RESTDataSource {
     super();
 
     // This has to be moved into ENV file
-    this.baseURL = "http://localhost:5000/auth";
+    this.baseURL = `http://${process.env.AUTH_SERVICE_URL}:${process.env.AUTH_SERVICE_PORT}/auth`;
   }
 
   /**

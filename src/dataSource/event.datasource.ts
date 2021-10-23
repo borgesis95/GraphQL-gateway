@@ -4,7 +4,7 @@ import { AddEvent, ScanEvent } from "../../src/interfaces/events";
 class EventAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "http://localhost:5000/events";
+    this.baseURL = `http://${process.env.EVENT_SERVICE_URL}:${process.env.EVENT_SERVICE_PORT}/events`;
   }
 
   /**
