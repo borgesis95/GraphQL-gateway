@@ -23,9 +23,11 @@ export default {
         password,
       });
 
+      console.log("Response",response);
+
       const token: string = response.data.token;
       // Now, JWT will be saved into redis store.
-      await dataSources.redisSource.saveToken(email, token);
+     // await dataSources.redisSource.saveToken(email, token);
       return dataSources.usersAPI.loginUserReducer(email, token);
     },
   },
