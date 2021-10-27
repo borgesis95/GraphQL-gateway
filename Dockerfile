@@ -13,6 +13,6 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-EXPOSE 5003
+EXPOSE 5001
 
 CMD ["node" , "dist/server.js"]
