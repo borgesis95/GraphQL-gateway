@@ -24,7 +24,7 @@ export default {
       { userId }: any,
       { dataSources, user }: any
     ) => {
-      if (!user) {
+      if (user) {
         const response = await dataSources.eventsAPI.getEventsUserList(userId);
         return dataSources.eventsAPI.eventsUserListReducer(response.data);
       }

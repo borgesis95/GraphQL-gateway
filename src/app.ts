@@ -33,6 +33,7 @@ export default class App {
 
         // Add the user to the context
         const isUserOnRedis = await redis.get(token);
+        console.log("isUseronreid",isUserOnRedis);
         return { user: isUserOnRedis ? JSON.parse(isUserOnRedis) : null };
       },
 
