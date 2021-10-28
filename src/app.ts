@@ -19,7 +19,7 @@ export default class App {
   }
 
   public listen() {
-    const redis = new Redis(process.env.REDIS_HOST,{
+    const redis = new Redis(process.env.REDIS_HOST, {
       port: parseInt(process.env.REDIS_PORT), // Redis port
     });
 
@@ -33,7 +33,6 @@ export default class App {
 
         // Add the user to the context
         const isUserOnRedis = await redis.get(token);
-        console.log("isUseronreid",isUserOnRedis);
         return { user: isUserOnRedis ? JSON.parse(isUserOnRedis) : null };
       },
 
@@ -47,12 +46,10 @@ export default class App {
 
       /* This method of ApolloServer constructor intercept all errors before to get back to client */
       formatError: (error: GraphQLError) => {
-        console.log("error", error);
         if (error.originalError instanceof AuthenticationError) {
           return new GraphQLError("Not allowed to perform this operation");
         }
-
-        console.log("error", error);
+        console.error(error);
         if (error && error.extensions && error.extensions.response) {
           return new GraphQLError(
             `Internal Server Error: ${error.extensions.response.body.message}`

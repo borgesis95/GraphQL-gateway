@@ -9,10 +9,8 @@ export default {
       { userId }: any,
       { dataSources, user }: any
     ) => {
-      if (!user) {
-        const response = await dataSources.eventsAPI.getEventListFromUser(
-          userId
-        );
+      if (user) {
+        const response = await dataSources.eventsAPI.getAllEvent();
         return dataSources.eventsAPI.eventsReducer(response.data);
       }
 
@@ -37,13 +35,10 @@ export default {
       body: ScanEvent,
       { dataSources, user }: any
     ) => {
-      if (!user) {
+      if (user) {
         const response = await dataSources.eventsAPI.scanEvent(body);
 
-
         if (response.status === 400) {
-          console.log("response.status",response.status);
-
           throw new GraphQLError(response.data);
         }
 

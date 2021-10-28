@@ -1,5 +1,6 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import { AddEvent, ScanEvent } from "../../src/interfaces/events";
+import { IEvent } from "../types";
 
 class EventAPI extends RESTDataSource {
   constructor() {
@@ -11,16 +12,15 @@ class EventAPI extends RESTDataSource {
    * @description Get events associated to specific users
    */
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  async getEventListFromUser(userId: number) {
-    return this.get(`basket/${userId}`);
+  async getAllEvent() {
+    return this.get(`/list`);
   }
 
   /**
    * This method will be call API that allow to insert
    * an events on events list (which each user could decide to partecipate)
    */
-  async addEventOnList(body: AddEvent){
+  async addEventOnList(body: AddEvent) {
     const bodyForRequest = {
       titolo: body.title,
       descrizione: body.description,
@@ -37,10 +37,10 @@ class EventAPI extends RESTDataSource {
   }
 
   /**
-   * 
-   * This method allow to retrieve events for specific user 
-   * @param userId 
-   * @returns 
+   *
+   * This method allow to retrieve events for specific user
+   * @param userId
+   * @returns
    */
   getEventsUserList(userId: number) {
     return this.get(`/basket/${userId}`);
@@ -48,9 +48,9 @@ class EventAPI extends RESTDataSource {
 
   /**
    * This method allow user  to add an event on his list
-   * @param userId 
-   * @param eventId 
-   * @returns 
+   * @param userId
+   * @param eventId
+   * @returns
    */
 
   addEventOnUserList(userId: number, eventId: number) {
@@ -64,8 +64,8 @@ class EventAPI extends RESTDataSource {
   /**
    * This method will be invoked when event's staff
    * need to check ticket of an user
-   * @param body 
-   * @returns 
+   * @param body
+   * @returns
    */
 
   scanEvent(body: ScanEvent) {
@@ -78,24 +78,26 @@ class EventAPI extends RESTDataSource {
   }
 
   /*Reducers*/
-  eventsReducer(data: any) {
-    return data.map((item: any) => {
+  eventsReducer(data: IEvent[]) {
+    return data.map((item: IEvent) => {
       return {
         id: item.id,
         title: item.titolo,
+        description: item.descrizione,
+        date: item.dataEvento,
+        city: item.citta,
       };
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  eventsUserListReducer(data: any) {
-    return data.map((item: any) => {
+  eventsUserListReducer(data: IEvent[]) {
+    return data.map((item: IEvent) => {
       return {
         id: item.id,
         accessKey: item.chiaveDiAccesso,
         title: item.titolo,
         description: item.descrizione,
-        dataevento: item.dataevento,
+        dataevento: item.dataEvento,
         durata: item.durata,
       };
     });

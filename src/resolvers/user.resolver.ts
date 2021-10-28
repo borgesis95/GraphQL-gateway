@@ -4,10 +4,11 @@ import { UserRequest } from "../interfaces/user.interface";
 export default {
   Query: {
     users: async (parent: any, _: any, { dataSources, user }: any) => {
+
       // If users exist on Redis
       if (user) {
         const response = await dataSources.usersAPI.getAllUsers();
-        return response.data;
+        return dataSources.usersAPI.usersReducer(response.data);
       }
       throw new AuthenticationError("You need to be logged in");
     },
@@ -23,11 +24,10 @@ export default {
         password,
       });
 
-      console.log("Response",response);
 
       const token: string = response.data.token;
       // Now, JWT will be saved into redis store.
-     // await dataSources.redisSource.saveToken(email, token);
+      await dataSources.redisSource.saveToken(email, token);
       return dataSources.usersAPI.loginUserReducer(email, token);
     },
   },

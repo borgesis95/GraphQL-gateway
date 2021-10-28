@@ -1,24 +1,15 @@
 import { gql } from "apollo-server-express";
 
 export default gql`
-  type EventsUser {
-    """
-    events's id
-    """
-    id: ID
-    """
-    title of the event
-    """
-    title: String
-  }
 
-  type EventsUserList {
+  type Events {
     id : ID,
     accessKey : String,
     title : String,
     description : String,
     eventDate : String,
-    duration : Int
+    duration : Int,
+    city: String
   }
 
   input AddEvent {
