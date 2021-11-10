@@ -9,6 +9,7 @@ import EventAPI from "./dataSource/event.datasource";
 import { GraphQLError } from "graphql";
 import RedisDataSource from "./dataSource/redis.datasource";
 import { verify } from "./utils";
+import { decode } from "jsonwebtoken";
 
 export default class App {
   public app: express.Application;
@@ -33,9 +34,9 @@ export default class App {
         const token = req.headers.authorization || "";
         let isTokenInvalid = false;
 
-        console.log("token",token);
+        console.log("token",req.headers);
 
-        
+
         let decoded: any = null;
 
         // Check just if authorization is present
@@ -49,9 +50,12 @@ export default class App {
               isTokenInvalid = true;
             } else if (isTokenInvalid === false) {
               decoded = verify(token);
+              console.log("token valido");
             }
           }
         }
+
+        console.log("decoded",decoded);
 
         return { user: decoded && decoded.user ? decoded.user : null };
       },
