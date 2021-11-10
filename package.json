@@ -8,7 +8,7 @@
     "start": "nodemon server.ts",
     "lint": "eslint . --ext .ts",
     "commit": "cz",
-    "build" : "tsc"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

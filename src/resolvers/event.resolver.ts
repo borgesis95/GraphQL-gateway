@@ -4,11 +4,10 @@ import { AddEvent, ScanEvent } from "../../src/interfaces/events";
 
 export default {
   Query: {
-    events: async (
-      parent: any,
-      { userId }: any,
-      { dataSources, user }: any
-    ) => {
+    /*
+      Allow to retrieve all users events
+    */
+    events: async (parent: any, _: any, { dataSources, user }: any) => {
       if (user) {
         const response = await dataSources.eventsAPI.getAllEvent();
         return dataSources.eventsAPI.eventsReducer(response.data);
@@ -17,13 +16,18 @@ export default {
       throw new AuthenticationError("You need to be logged in");
     },
 
-    userEventList: async (
-      parent: any,
-      { userId }: any,
-      { dataSources, user }: any
-    ) => {
+    /**
+     * Allow user to get all its events
+     * @param parent
+     * @param param1
+     * @param param2
+     * @returns
+     */
+    userEventList: async (parent: any, _: any, { dataSources, user }: any) => {
       if (user) {
-        const response = await dataSources.eventsAPI.getEventsUserList(userId);
+        const response = await dataSources.eventsAPI.getEventsUserList(
+          user._id
+        );
         return dataSources.eventsAPI.eventsUserListReducer(response.data);
       }
 
@@ -76,11 +80,15 @@ export default {
       { dataSources, user }: any
     ) => {
       try {
-        if (!user) {
+        if (user) {
           const response = await dataSources.eventsAPI.addEventOnUserList(
-            body.params.userId,
+            user._id,
             body.params.eventId
           );
+
+          if (response.status === 400) {
+            throw new GraphQLError(response.data);
+          }
           return response.data;
         }
 

@@ -1,4 +1,4 @@
-import { RESTDataSource } from "apollo-datasource-rest";
+import { RequestOptions, RESTDataSource } from "apollo-datasource-rest";
 import { UserRequest } from "../interfaces/user.interface";
 import { IUser } from "../types";
 
@@ -28,12 +28,16 @@ class UserAPI extends RESTDataSource {
 
   /**
    * This api allow user to signin into the application
-   * @param body 
-   * @returns 
+   * @param body
+   * @returns
    */
 
   async signinUser(body: UserRequest) {
     return this.post("signin", body);
+  }
+
+  logoutUser(token: string) {
+    return this.post("logout", { token });
   }
 
   /*Reducers*/

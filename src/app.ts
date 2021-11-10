@@ -8,6 +8,7 @@ import UserAPI from "./dataSource/user.datasource";
 import EventAPI from "./dataSource/event.datasource";
 import { GraphQLError } from "graphql";
 import RedisDataSource from "./dataSource/redis.datasource";
+import { verify } from "./utils";
 
 export default class App {
   public app: express.Application;
@@ -30,10 +31,26 @@ export default class App {
       context: async ({ req }) => {
         // Get the user token from the headers.
         const token = req.headers.authorization || "";
+        let isTokenInvalid = false;
 
-        // Add the user to the context
-        const isUserOnRedis = await redis.get(token);
-        return { user: isUserOnRedis ? JSON.parse(isUserOnRedis) : null };
+        let decoded: any = null;
+
+        // Check just if authorization is present
+        if (token) {
+          // Before to check token's validation, gateway need to check that token is not on the blacklist (it means token was reovked)
+          const data = await redis.get("blacklist");
+          if (data !== null) {
+            const parsedData = JSON.parse(data);
+
+            if (parsedData["token"].includes(token)) {
+              isTokenInvalid = true;
+            } else if (isTokenInvalid === false) {
+              decoded = verify(token);
+            }
+          }
+        }
+
+        return { user: decoded && decoded.user ? decoded.user : null };
       },
 
       dataSources: () => {

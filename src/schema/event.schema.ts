@@ -28,6 +28,5 @@ export default gql`
 
   input AddEventUserList {
     eventId : String,
-    userId : String
   }
 `;
