@@ -34,7 +34,6 @@ export default class App {
         const token = req.headers.authorization || "";
         let isTokenInvalid = false;
 
-        console.log("token", req.headers);
 
         let decoded: any = null;
 
@@ -50,11 +49,9 @@ export default class App {
             }
           } else if (isTokenInvalid === false) {
             decoded = verify(token);
-            console.log("token valido");
           }
         }
 
-        console.log("decoded", decoded);
 
         return { user: decoded && decoded.user ? decoded.user : null };
       },
