@@ -64,6 +64,7 @@ export default class App {
       /* This method of ApolloServer constructor intercept all errors before to get back to client */
       formatError: (error: GraphQLError) => {
         if (error.originalError instanceof AuthenticationError) {
+          console.error(error);
           return new GraphQLError("Not allowed to perform this operation");
         }
         console.error(error);
