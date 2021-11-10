@@ -37,6 +37,7 @@ export default class App {
 
         // Check just if authorization is present
         if (token) {
+          console.log("token",token);
           // Before to check token's validation, gateway need to check that token is not on the blacklist (it means token was reovked)
           const data = await redis.get("blacklist");
           if (data !== null) {

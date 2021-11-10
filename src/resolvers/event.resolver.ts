@@ -25,6 +25,7 @@ export default {
      */
     userEventList: async (parent: any, _: any, { dataSources, user }: any) => {
       if (user) {
+        console.log("user",user);
         const response = await dataSources.eventsAPI.getEventsUserList(
           user._id
         );
