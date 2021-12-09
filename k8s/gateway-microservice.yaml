@@ -1,0 +1,40 @@
+apiVersion : apps/v1
+kind : Deployment
+metadata:
+  name: graphql-gateway-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graphql-gateway-service
+  template:
+    metadata:
+      labels:
+        app: graphql-gateway-service
+    spec:
+      containers:
+      - name: graphql-gateway-service
+        image: borgesis95/graphql-gateway-service
+        ports: 
+          - containerPort : 5001
+        env:
+          - name: REDIS_HOST
+            value: "redis.default.svc.cluster.local"
+          - name: REDIS_PORT
+            value: "6379"
+          - name: REDIS_EXPIRATION_TIME
+            value: "1800"
+          - name: GATEWAY_PORT
+            value: "5001"
+          - name: AUTH_SERVICE_URL
+            value: "auth-service.default.svc.cluster.local"
+          - name: AUTH_SERVICE_PORT
+            value: "5000"
+          - name: EVENT_SERVICE_URL
+            value: event-service.default.svc.cluster.local
+          - name: EVENT_SERVICE_PORT
+            value: "5003"
+          - name: JWTSECRET
+            value: jwtsecret
+          
+
