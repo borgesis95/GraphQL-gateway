@@ -36,5 +36,17 @@ spec:
             value: "5003"
           - name: JWTSECRET
             value: jwtsecret
-          
 
+---
+apiVersion : v1
+kind : Service
+metadata: 
+  name : graphql-gateway-service
+spec:
+  selector:
+    app: graphql-gateway-service
+  ports:
+    - port: 80
+      targetPort: 5001
+      nodePort: 31280
+  type: NodePort
